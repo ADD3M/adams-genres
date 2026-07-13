@@ -28,7 +28,7 @@
 - `android/` is Capacitor-managed. Prefer web app changes in `src/` and use Capacitor tooling for native sync.
 - The `DATA` constant in `src/App.jsx` is the app's source of genres/subgenres.
 - `src/App.jsx` now persists selected genre, current roll, and recent history in `localStorage`.
-- The app also supports keyboard shortcuts (Space = reroll, C = copy), in-app toast feedback, and history item restore.
+- The app also supports keyboard shortcuts (Space = reroll, C = copy), in-app toast feedback, a dedicated "Reroll subgenre" action, and history item restore.
 
 ## Recommendations for AI agents
 - Keep changes small and centered in `src/App.jsx` unless adding a broader app structure.
