@@ -72,21 +72,11 @@ npm run lint
 
 ## Android & Packaging
 
-This repo uses **Capacitor** to package the web app as an Android app.
-
-### Table of Contents
-1. [Prerequisites](#prerequisites)
-2. [Full Build Pipeline](#full-build-pipeline-clone-to-apk-to-phone)
-3. [Quick Rebuild for Iteration](#development-workflow)
-4. [Signing for Production](#signing-the-release-apk)
-5. [Troubleshooting](#troubleshooting)
+This repo uses **Capacitor** to package the web app as an Android app. This guide covers building a debug APK for personal testing on your phone via USB.
 
 ### Prerequisites
 
-Before building for Android, install:
-
-1. **Node.js & npm** (v16 or higher)
-   - https://nodejs.org
+1. **Node.js & npm** (v16 or higher) — https://nodejs.org
 
 2. **Java Development Kit (JDK) 17 or higher**
    - macOS: `brew install openjdk@17`
@@ -95,139 +85,68 @@ Before building for Android, install:
    - Verify: `java -version`
 
 3. **Android SDK**
-   - **Option A: Android Studio (Recommended)**
-     - https://developer.android.com/studio
-     - SDK Manager will install required tools
-   - **Option B: Command-line tools only**
-     - https://developer.android.com/studio
-     - Extract to `/opt/android-sdk` (or your preferred location)
-     - Install packages:
-       ```bash
-       sdkmanager "platforms;android-33" "build-tools;30.0.3" "platform-tools"
-       ```
+   - **Easiest:** Download [Android Studio](https://developer.android.com/studio) (includes everything)
+   - **Or CLI only:** Install cmdline-tools and run:
+     ```bash
+     sdkmanager "platforms;android-33" "build-tools;30.0.3" "platform-tools"
+     ```
 
-4. **Set Android SDK environment variable**
+4. **Set Android SDK path**
    - macOS/Linux: Add to `~/.bashrc` or `~/.zshrc`:
      ```bash
      export ANDROID_SDK_ROOT=/path/to/android-sdk
      export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
      ```
    - Windows: Set `ANDROID_SDK_ROOT` in System Properties → Environment Variables
-   - Verify: `echo $ANDROID_SDK_ROOT`
 
-### Full Build Pipeline: Clone to APK to Phone
+### Build and Send to Your Phone
 
-**Step 1: Clone and set up**
-```bash
-git clone https://github.com/ADD3M/adams-genres.git
-cd adams-genres
-npm install
-```
-
-**Step 2: Test the web app**
-```bash
-npm run dev
-```
-Verify the app works in your browser. Press `Ctrl+C` to stop.
-
-**Step 3: Build the web app**
+**Step 1: Prepare the web app**
 ```bash
 npm run build
-```
-
-**Step 4: Sync to Android project**
-```bash
 npx cap copy android
 ```
-Copies web assets from `dist/` → `android/app/src/main/assets/public/`
 
-**Step 5: Build the APK**
-
-*Debug APK (for testing):*
+**Step 2: Build the APK**
 ```bash
 cd android
 ./gradlew assembleDebug
 ```
 Output: `android/app/build/outputs/apk/debug/app-debug.apk`
 
-*Release APK (for production):*
+**Step 3: Connect your phone and install**
+
+Enable USB Debugging on your phone:
+- Settings → About Phone → tap Build Number 7 times
+- Settings → Developer Options → enable USB Debugging
+- Connect via USB cable
+
+Then install:
 ```bash
-cd android
-./gradlew assembleRelease
+adb install android/app/build/outputs/apk/debug/app-debug.apk
 ```
-Output: `android/app/build/outputs/apk/release/app-release.apk` (unsigned)
 
-**Step 6: Install on a device or emulator**
-
-*Using Android Studio Emulator:*
-1. Open Android Studio → AVD Manager → Create or start a device
-2. Install the APK:
-   ```bash
-   adb install android/app/build/outputs/apk/debug/app-debug.apk
-   ```
-
-*Using a physical Android phone:*
-1. Enable Developer Mode:
-   - Settings → About Phone → tap Build Number 7 times
-2. Enable USB Debugging:
-   - Settings → Developer Options → USB Debugging
-3. Connect via USB
-4. Verify connection:
-   ```bash
-   adb devices
-   ```
-5. Install:
-   ```bash
-   adb install android/app/build/outputs/apk/debug/app-debug.apk
-   ```
-
-**Step 7: Launch the app**
+**Step 4: Done!**
 The app will appear on your home screen. Tap to open.
 
-### Development Workflow
+### Quick iteration workflow
 
-After making changes to the web app:
-1. Test: `npm run dev`
-2. Build: `npm run build`
-3. Sync: `npx cap copy android`
-4. Rebuild APK: `cd android && ./gradlew assembleDebug`
-5. Reinstall: `adb install -r android/app/build/outputs/apk/debug/app-debug.apk`
-
-### Signing the Release APK
-
-For Play Store or production distribution, sign the APK with a keystore.
-
-**Generate a keystore (first time only):**
+After making code changes:
 ```bash
-keytool -genkey -v -keystore adams-genres.keystore -alias adams-genres-key \
-  -keyalg RSA -keysize 2048 -validity 10000
+npm run build
+npx cap copy android
+cd android && ./gradlew assembleDebug
+adb install -r android/app/build/outputs/apk/debug/app-debug.apk
 ```
-Save this file securely.
-
-**Sign the APK:**
-```bash
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 \
-  -keystore adams-genres.keystore \
-  android/app/build/outputs/apk/release/app-release-unsigned.apk adams-genres-key
-```
-
-**Align the APK (required for Play Store):**
-```bash
-zipalign -v 4 android/app/build/outputs/apk/release/app-release-unsigned.apk \
-  android/app/build/outputs/apk/release/app-release-signed.apk
-```
-
-Result: `android/app/build/outputs/apk/release/app-release-signed.apk` ready for submission.
 
 ### Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| Cannot find Android SDK | Verify `ANDROID_SDK_ROOT` is set correctly. Run `adb devices` to test. |
-| Java version mismatch | Ensure Java 17+: `java -version`. Set `JAVA_HOME` if needed. |
-| Gradle license errors | Run `sdkmanager --licenses` and accept all, or use Android Studio's SDK Manager. |
-| Gradle build fails | Run `./gradlew clean` and rebuild. Check `android/local.properties` has correct `sdk.dir`. |
-| App crashes on device | Check logs: `adb logcat`. Verify permissions in `AndroidManifest.xml`. |
+| Issue | Fix |
+|-------|-----|
+| `adb devices` shows nothing | Check USB Debugging is enabled. Try different USB cable. |
+| Gradle build fails | Run `./gradlew clean` and try again. |
+| Java version error | Verify Java 17+: `java -version`. Set `JAVA_HOME` if needed. |
+| Cannot find Android SDK | Check `ANDROID_SDK_ROOT` is set: `echo $ANDROID_SDK_ROOT` |
 
 ---
 
