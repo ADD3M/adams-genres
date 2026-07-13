@@ -76,28 +76,32 @@ This repo uses **Capacitor** to package the web app as an Android app. This guid
 
 ### Prerequisites
 
-1. **Node.js & npm** (v16 or higher) — https://nodejs.org
+1. **Node.js & npm** (v16 or higher)
+   ```bash
+   sudo apt-get install nodejs npm
+   ```
+   Or download from https://nodejs.org
 
 2. **Java Development Kit (JDK) 17 or higher**
-   - macOS: `brew install openjdk@17`
-   - Ubuntu/Debian: `sudo apt-get install openjdk-17-jdk`
-   - Windows: https://www.oracle.com/java/technologies/downloads/
-   - Verify: `java -version`
+   ```bash
+   sudo apt-get install openjdk-17-jdk
+   ```
+   Verify: `java -version`
 
 3. **Android SDK**
-   - **Easiest:** Download [Android Studio](https://developer.android.com/studio) (includes everything)
+   - **Easiest:** Download [Android Studio](https://developer.android.com/studio)
    - **Or CLI only:** Install cmdline-tools and run:
      ```bash
      sdkmanager "platforms;android-33" "build-tools;30.0.3" "platform-tools"
      ```
 
 4. **Set Android SDK path**
-   - macOS/Linux: Add to `~/.bashrc` or `~/.zshrc`:
-     ```bash
-     export ANDROID_SDK_ROOT=/path/to/android-sdk
-     export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
-     ```
-   - Windows: Set `ANDROID_SDK_ROOT` in System Properties → Environment Variables
+   Add to `~/.bashrc` or `~/.zshrc`:
+   ```bash
+   export ANDROID_SDK_ROOT=/path/to/android-sdk
+   export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
+   ```
+   Then reload: `source ~/.bashrc`
 
 ### Build and Send to Your Phone
 
@@ -145,7 +149,7 @@ adb install -r android/app/build/outputs/apk/debug/app-debug.apk
 |-------|-----|
 | `adb devices` shows nothing | Check USB Debugging is enabled. Try different USB cable. |
 | Gradle build fails | Run `./gradlew clean` and try again. |
-| Java version error | Verify Java 17+: `java -version`. Set `JAVA_HOME` if needed. |
+| Java version error | Verify Java 17+: `java -version`. Set `JAVA_HOME` if needed: `export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64` |
 | Cannot find Android SDK | Check `ANDROID_SDK_ROOT` is set: `echo $ANDROID_SDK_ROOT` |
 
 ---
