@@ -7,7 +7,7 @@
 - The main app logic lives in `src/App.jsx`.
 
 ## Key files and intent
-- `src/App.jsx` - application logic, genre/subgenre data, UI, reroll + copy behavior.
+- `src/App.jsx` - application logic, genre/subgenre data, UI, reroll, copy, share, favorites, custom genre creation, and theme toggle behavior.
 - `src/main.jsx` - React bootstrapping.
 - `vite.config.js` - Vite setup.
 - `tailwind.config.js` - Tailwind content config.
@@ -27,8 +27,8 @@
 - `dist/` and generated Android build output are ignored by `.gitignore`.
 - `android/` is Capacitor-managed. Prefer web app changes in `src/` and use Capacitor tooling for native sync.
 - The `DATA` constant in `src/App.jsx` is the app's source of genres/subgenres.
-- `src/App.jsx` now persists selected genre, current roll, and recent history in `localStorage`.
-- The app also supports keyboard shortcuts (Space = reroll, C = copy), in-app toast feedback, a dedicated "Reroll subgenre" action, and history item restore.
+- `src/App.jsx` now persists theme, selected genre, custom genres, current roll, history, and favorites in `localStorage`.
+- The app also supports keyboard shortcuts (Space = reroll, C = copy), native share support, in-app toast feedback, a dedicated "Reroll subgenre" action, favorites, custom genre creation, and history item restore.
 
 ## Recommendations for AI agents
 - Keep changes small and centered in `src/App.jsx` unless adding a broader app structure.

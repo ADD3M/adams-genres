@@ -7,13 +7,21 @@ It is packaged for Android using Capacitor, with a touch-friendly interface and 
 - Generate guitar practice prompts by rolling genres and subgenres.
 - Lock a genre for focused results.
 - Copy the current prompt to clipboard.
+- Share the current prompt via native share or copy fallback.
 - Save recent rolls and restore them with a tap.
+- Favorite best prompts for quick restore.
+- Add custom genres and subgenres in-app.
+- Toggle between dark and light themes.
 - Works well on mobile and also supports desktop keyboard shortcuts.
 
 ## Features
 - Mobile-friendly UI with touch controls
 - Genre lock dropdown
 - Reroll button and "Reroll subgenre" button
+- Favorite a prompt and restore favorites quickly
+- Custom genre and subgenre creation
+- Dark/light theme toggle
+- Native share support with copy fallback
 - Recent roll history with restore-on-tap
 - Toast feedback for actions
 - Local storage persistence
@@ -26,8 +34,10 @@ It is packaged for Android using Capacitor, with a touch-friendly interface and 
 3. Tap **Reroll** to generate a new genre + subgenre.
 4. Tap **Reroll subgenre** to keep the current genre and refresh only the subgenre.
 5. Tap **Copy** to copy the current prompt.
-6. Tap a history item to restore that roll.
-7. Tap **Clear** to empty the history.
+5. Tap **Share** to use native sharing or copy text manually.
+6. Tap **Favorite** to save the best prompts.
+7. Tap a history item to restore that roll.
+8. Tap **Clear** to empty the history.
 
 ---
 
