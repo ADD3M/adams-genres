@@ -157,10 +157,28 @@ adb install -r android/app/build/outputs/apk/debug/app-debug.apk
 
 | Issue | Fix |
 |-------|-----|
-| `adb devices` shows nothing | Check USB Debugging is enabled. Try different USB cable. |
+| `adb devices` shows nothing | Check USB Debugging is enabled. Try a different USB cable or port. |
 | Gradle build fails | Run `./gradlew clean` and try again. |
 | Java version error | Verify Java 17+: `java -version`. Set `JAVA_HOME` if needed: `export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64` |
-| Cannot find Android SDK | Check `ANDROID_SDK_ROOT` is set: `echo $ANDROID_SDK_ROOT` |
+| Cannot find Android SDK | Check `ANDROID_SDK_ROOT` or `ANDROID_HOME` is set: `echo $ANDROID_SDK_ROOT` and `echo $ANDROID_HOME`. |
+| `cordova.variables.gradle` missing | Re-sync Capacitor from the repo root: `npx cap sync android` or `npx cap update android`. |
+| Gradle says `SDK location not found` | Create or edit `android/local.properties` and add: `sdk.dir=/path/to/your/Android/Sdk`. If you prefer the terminal, export it before building: `export ANDROID_SDK_ROOT=/path/to/your/Android/Sdk` and `export ANDROID_HOME=/path/to/your/Android/Sdk`. |
+| Build is using the wrong project path | Run the commands from the repo root, not from inside `android/` unless you are already there. |
+| Capacitor plugin files are stale | From the repo root, remove the generated plugins folder if needed and resync: `rm -rf android/capacitor-cordova-android-plugins && npx cap sync android`. |
+| Local repo is behind remote | Pull the latest changes before rebuilding: `git pull origin main`. |
+
+### Useful local commands
+
+```bash
+cd ~/adams-genres
+npm install
+npm run build
+npx cap sync android
+cd android
+./gradlew assembleDebug
+```
+
+If you are building on a different machine, make sure the Android SDK path in `android/local.properties` matches that machine.
 
 ---
 
